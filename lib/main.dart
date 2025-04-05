@@ -1,3 +1,4 @@
+import 'package:edu_tech/User/UserDashboardscreen.dart';
 import 'package:edu_tech/admin/AdminDashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white
       ),
       debugShowCheckedModeBanner: false,
-      home: Admindashboardscreen(),
+      home: Userdashboardscreen(),
     );
   }
 }
