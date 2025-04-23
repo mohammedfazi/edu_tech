@@ -1,11 +1,19 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:edu_tech/User/Assignment_upload.dart';
+import 'package:edu_tech/User/Chatbot.dart';
+import 'package:edu_tech/User/UserAttendencescreen.dart';
+import 'package:edu_tech/User/UserEventscreen.dart';
 import 'package:edu_tech/User/UserExamscreen.dart';
 import 'package:edu_tech/User/UserHomeworkscreen.dart';
+import 'package:edu_tech/User/UserLeavescreen.dart';
 import 'package:edu_tech/User/UserNotesscreen.dart';
+import 'package:edu_tech/admin/Addeventscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../Common/Color_Constant.dart';
 import '../Common/Commonsize.dart';
 import '../Common/Textstyle.dart';
+import '../Loginscreen.dart';
 import '../admin/AddAttendencescreen.dart';
 import '../admin/AdminDashboard.dart';
 import '../admin/Leavescreen.dart';
@@ -24,23 +32,32 @@ class Userdashboardscreen extends StatefulWidget {
 class _UserdashboardscreenState extends State<Userdashboardscreen> {
 
   final List<GridItem> gridItems = [
-    GridItem(icon: Icons.home, name: 'Homework', screen: Userhomeworkscreen()),
+    GridItem(icon: Icons.home, name: 'Assignment', screen: Userhomeworkscreen()),
     GridItem(icon: Icons.map, name: 'Bus Tracing', screen: Bustractingscreen()),
-    GridItem(icon: Icons.event, name: 'Attendance', screen: AttendanceListPage()),
+    GridItem(icon: Icons.event, name: 'Attendance', screen: Userattendencescreen()),
     GridItem(icon: Icons.rss_feed, name: 'News Feed', screen: NewsScreen()),
     GridItem(icon: Icons.notes, name: 'Notes', screen: Usernotesscreen()),
     GridItem(icon: Icons.library_books, name: 'Open Library', screen: OpenLibraryScreen()),
     GridItem(icon: Icons.grading, name: 'Exam Mark', screen: Userexamscreen()),
-    GridItem(icon: Icons.calendar_today, name: 'Leave Application', screen: TeacherLeaveApplicationListPage()), // Added Leave Application
+    GridItem(icon: Icons.calendar_today, name: 'Leave Application', screen: Userleavescreen()), // Added Leave Application
+    GridItem(icon: Icons.chat_rounded, name: 'Chat Bot', screen: EduNestChatbot()),
+    GridItem(icon: Icons.event, name: 'Events', screen: Usereventscreen()),
+    GridItem(icon: Icons.assessment, name: 'Assigment Upload', screen: AssignmentListPage()),
+
   ];
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: Text("Edu Nest",style: commonstylepoppins(color: Colors.black,weight: FontWeight.w700,size: 15),),
+        actions: [
+          IconButton(onPressed: (){
+            logout();
+          }, icon: Icon(Icons.logout,color: Colors.black,))
+        ],
       ),
       body:SingleChildScrollView(
         child: Padding(
@@ -79,18 +96,19 @@ class _UserdashboardscreenState extends State<Userdashboardscreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Edu Nest Categories",style: commonstylepoppins(),),
+                child: Text("Edu Nest Categories",style: commonstylepoppins(weight: FontWeight.w800,size: 15),),
               ),
 
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0), // Increased padding for better spacing
                 child: GridView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // 2 columns
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1.0, // Square items
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 16, // Increased spacing
+                    mainAxisSpacing: 16, // Increased spacing
+                    childAspectRatio: 1.0,
                   ),
                   itemCount: gridItems.length,
                   itemBuilder: (context, index) {
@@ -100,16 +118,42 @@ class _UserdashboardscreenState extends State<Userdashboardscreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue), // Border color
-                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient( // Added gradient background
+                            colors: [
+                              Colors.blue.shade200,
+                              Colors.blue.shade50,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12), // Rounded corners
+                          boxShadow: [ // Added subtle shadow
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(gridItems[index].icon, size: 40),
-                            SizedBox(height: 8),
-                            Text(gridItems[index].name,style: commonstylepoppins(weight: FontWeight.w800),textAlign: TextAlign.center,),
+                            Icon(
+                              gridItems[index].icon,
+                              size: 40,
+                              color: Colors.blue.shade800, // Darker icon color
+                            ),
+                            SizedBox(height: 12), // Increased spacing
+                            Text(
+                              gridItems[index].name,
+                              style: commonstylepoppins(
+                                weight: FontWeight.w700, // Slightly lighter weight
+                                size: 14, // Adjusted font size
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),
@@ -148,5 +192,64 @@ class _UserdashboardscreenState extends State<Userdashboardscreen> {
         ),
       ),
     );
+  }
+
+  Future<void> logout() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+            title: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            content: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "Are you sure you want to logout the Edu Nest.",
+                style: commonstylepoppins(
+                  color: Colors.black,
+                  weight: FontWeight.w400,
+                  size: 15,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: displaywidth(context) * 0.30,
+                    child: TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Center(
+                            child: Text(
+                              "No",
+                              style: commonstylepoppins(color: Colors.black),
+                            ))),
+                  ),
+                  SizedBox(
+                    width: displaywidth(context) * 0.30,
+                    child: TextButton(
+                        onPressed: () {
+                          Get.to(const Loginscreen());
+                        },
+                        child: Center(
+                            child: Text(
+                              "Yes",
+                              style: commonstylepoppins(color: Colors.black),
+                            ))),
+                  )
+                ],
+              )
+            ],
+          );
+        });
   }
 }

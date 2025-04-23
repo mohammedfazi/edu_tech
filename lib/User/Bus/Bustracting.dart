@@ -16,103 +16,122 @@ class _BustractingscreenState extends State<Bustractingscreen> {
 
   List<dynamic> busdata = [
     {
-      "bus_number": "101",
+      "bus_number": "C1",
       "route": [
-        "Gandhipuram",
-        "Ukkadam",
-        "Town Hall",
-        "RS Puram",
-        "Peelamedu"
+        "Tambaram",
+        "Chromepet",
+        "Pallavaram",
+        "Kundrathur",
+        "Tiruninravur"
       ],
-      "number_plate": "TN 01 AB 1234",
-      "google_map_link": "https://www.google.com/maps/dir/Gandhipuram,+Coimbatore,+Tamil+Nadu/Peelamedu,+Coimbatore,+Tamil+Nadu/",
+      "number_plate": "TN 22 AA 1111",
+      "start_latitude": 12.9218, // Tambaram start latitude
+      "start_longitude": 80.1247, // Tambaram start longitude
+      "end_latitude": 13.0347, // Tiruninravur end latitude
+      "end_longitude": 79.9556, // Tiruninravur end longitude
       "view_route_text": "View Route",
       "image_logo": "Assets/logo.png"
     },
     {
-      "bus_number": "102",
+      "bus_number": "C2",
       "route": [
-        "Singanallur",
-        "Ramanathapuram",
-        "Sundarapuram",
-        "Podanur",
-        "Kuniyamuthur"
+        "Poonamallee",
+        "Avadi",
+        "Nemilichery",
+        "Tiruninravur",
+        "Jaya Engineering College"
       ],
-      "number_plate": "TN 02 CD 5678",
-      "google_map_link": "https://www.google.com/maps/dir/Singanallur,+Coimbatore,+Tamil+Nadu/Kuniyamuthur,+Coimbatore,+Tamil+Nadu/",
+      "number_plate": "TN 29 BB 2222",
+      "start_latitude": 13.0362, // Poonamallee start latitude
+      "start_longitude": 80.1395, // Poonamallee start longitude
+      "end_latitude": 13.0347, // Jaya Engineering College latitude
+      "end_longitude": 79.9556, // Jaya Engineering College longitude
       "view_route_text": "View Route",
       "image_logo": "Assets/logo.png"
     },
     {
-      "bus_number": "103",
+      "bus_number": "C3",
       "route": [
-        "Vadavalli",
-        "Thondamuthur",
-        "Perur",
-        "Thennampalayam",
-        "Malumichampatti"
+        "Guindy",
+        "Kathipara",
+        "Ambattur",
+        "Pattravakkam",
+        "Tiruninravur"
       ],
-      "number_plate": "TN 03 EF 9101",
-      "google_map_link": "https://www.google.com/maps/dir/Vadavalli,+Coimbatore,+Tamil+Nadu/Malumichampatti,+Coimbatore,+Tamil+Nadu/",
+      "number_plate": "TN 23 CC 3333",
+      "start_latitude": 13.0058, // Guindy start latitude
+      "start_longitude": 80.2297, // Guindy start longitude
+      "end_latitude": 13.0347, // Tiruninravur end latitude
+      "end_longitude": 79.9556, // Tiruninravur end longitude
       "view_route_text": "View Route",
       "image_logo": "Assets/logo.png"
     },
     {
-      "bus_number": "104",
+      "bus_number": "C4",
       "route": [
-        "Saravanampatti",
-        "Vilankurichi",
-        "Kalapatti",
-        "Keeranatham",
-        "Idigarai"
+        "Broadway",
+        "Central Station",
+        "Egmore",
+        "Kilpauk",
+        "Ambattur OT"
       ],
-      "number_plate": "TN 04 GH 1122",
-      "google_map_link": "https://www.google.com/maps/dir/Saravanampatti,+Coimbatore,+Tamil+Nadu/Idigarai,+Coimbatore,+Tamil+Nadu/",
+      "number_plate": "TN 21 DD 4444",
+      "start_latitude": 13.0827, // Broadway start latitude
+      "start_longitude": 80.2831, // Broadway start longitude
+      "end_latitude": 13.0757, // Ambattur OT end latitude
+      "end_longitude": 80.1574, // Ambattur OT end longitude
       "view_route_text": "View Route",
       "image_logo": "Assets/logo.png"
     },
     {
-      "bus_number": "105",
+      "bus_number": "C5",
       "route": [
-        "Pollachi",
-        "Kinathukadavu",
-        "Sulur",
-        "Irugur",
-        "Avinashi Road"
+        "Thiruvanmiyur",
+        "Adyar",
+        "Saidapet",
+        "Ashok Nagar",
+        "Vadapalani"
       ],
-      "number_plate": "TN 05 IJ 3344",
-      "google_map_link": "https://www.google.com/maps/dir/Pollachi,+Coimbatore,+Tamil+Nadu/Avinashi+Road,+Coimbatore,+Tamil+Nadu/",
+      "number_plate": "TN 25 EE 5555",
+      "start_latitude": 12.9854, // Thiruvanmiyur start latitude
+      "start_longitude": 80.2708, // Thiruvanmiyur start longitude
+      "end_latitude": 13.0630, // Vadapalani end latitude
+      "end_longitude": 80.2093, // Vadapalani end longitude
       "view_route_text": "View Route",
       "image_logo": "Assets/logo.png"
     }
   ];
 
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> _launchURL(double startLat, double startLng, double endLat, double endLng) async {
+    String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$endLat,$endLng";
+
+    final uri = Uri.parse(googleMapsUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $googleMapsUrl';
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: common_appbar("Bus Tracking"),
       body: ListView.builder(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: busdata.length,
         itemBuilder: (context, index) {
           final busRoute = busdata[index];
           return Card(
             elevation: 5,
             color: Colors.white,
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -120,40 +139,46 @@ class _BustractingscreenState extends State<Bustractingscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "Bus Number : "+busRoute['bus_number'],
-                          style: commonstylepoppins(size: 20,weight: FontWeight.w800)
+                        "Bus Number : " + busRoute['bus_number'],
+                        style: commonstylepoppins(
+                            size: 20, weight: FontWeight.w800),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                          busRoute['number_plate'],
-                          style: commonstylepoppins(color: Colors.grey,size: 15,weight: FontWeight.w700)
+                        busRoute['number_plate'],
+                        style: commonstylepoppins(
+                            color: Colors.grey, size: 15, weight: FontWeight.w700),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
-                          'Bus Route Via:',
-                          style: commonstylepoppins(size: 15,weight: FontWeight.w700)
+                        'Bus Route Via:',
+                        style: commonstylepoppins(
+                            size: 15, weight: FontWeight.w700),
                       ),
                       for (var stop in busRoute['route'])
                         Text(
-                            stop,
-                            style: commonstylepoppins(color: Colors.grey,weight: FontWeight.w500)
+                          stop,
+                          style: commonstylepoppins(
+                              color: Colors.grey, weight: FontWeight.w500),
                         ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () => _launchURL(busRoute['google_map_link']),
+                        onPressed: () => _launchURL(busRoute['start_latitude'], busRoute['start_longitude'], busRoute['end_latitude'], busRoute['end_longitude']),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.yellowAccent.shade700,
                         ),
-                        child: Text('View Bus Route',style: commonstylepoppins(color: Colors.black,weight: FontWeight.w800),),
+                        child: Text(
+                          'View Bus Route',
+                          style: commonstylepoppins(
+                              color: Colors.black, weight: FontWeight.w800),
+                        ),
                       ),
                     ],
                   ),
-                  // Right part with bus logo
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Image.asset(
                     busRoute['image_logo'],
-                    width: displaywidth(context)*0.35,
-                    // height: 50,
+                    width: displaywidth(context) * 0.35,
                     fit: BoxFit.contain,
                   ),
                 ],

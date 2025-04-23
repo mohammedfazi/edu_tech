@@ -1,3 +1,4 @@
+import 'package:edu_tech/Common/Textstyle.dart';
 import 'package:edu_tech/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -244,11 +245,18 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
               itemCount: attendanceSnapshot.data!.length,
               itemBuilder: (context, index) {
                 final attendance = attendanceSnapshot.data![index];
-                return ListTile(
-                  title: Text(attendance.studentName),
-                  subtitle: Text(
-                      'Teacher: ${attendance.teacherName}, Date: ${DateFormat('yyyy-MM-dd').format(attendance.date)}'),
-                  trailing: Text(attendance.present ? 'Present' : 'Absent'),
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 2,
+                    child: ListTile(
+                      title: Text(attendance.studentName,style: commonstylepoppins(size: 15,weight: FontWeight.w800),),
+                      subtitle: Text(
+                          'Teacher: ${attendance.teacherName}, Date: ${DateFormat('yyyy-MM-dd').format(attendance.date)}',style: commonstylepoppins(),),
+                      trailing: Text(attendance.present ? 'Present' : 'Absent',style: commonstylepoppins(weight: FontWeight.w800,color: attendance.present?Colors.green:Colors.red,size: 15),),
+                    ),
+                  ),
                 );
               },
             );

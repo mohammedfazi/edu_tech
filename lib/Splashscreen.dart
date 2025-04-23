@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:edu_tech/Common/Textstyle.dart';
+import 'package:edu_tech/Loginsplit_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'Common/Color_Constant.dart';
@@ -18,7 +19,7 @@ class _splashscreenState extends State<splashscreen> {
   void splashfun(){
 
     Timer(Duration(seconds: 2), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Loginscreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Loginsplit()));
     });
 
   }
@@ -30,10 +31,10 @@ super.initState();
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Color_Constant.primarycolor,
+      backgroundColor: Colors.white,
       body: Center(
         // child: Image.asset("Assets/logo.png"),
-        child: Text("E-Campus",style: commonstylepoppins(size: 30,weight: FontWeight.w800),),
+        child: Text("Edu Nest",style: commonstylepoppins(size: 30,weight: FontWeight.w800,color: Colors.blue.shade900),),
       ),
     );
   }
